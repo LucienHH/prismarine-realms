@@ -18,15 +18,22 @@ declare module 'prismarine-realms' {
 
   export class BedrockRealmAPI extends RealmAPI {
     getRealmAddress(realmId: string): Promise<Address>
-    getRealmFromInvite(realmInviteCode: string): Promise<Realm>
+    getRealmFromInvite(realmInviteCode: string, invite: boolean): Promise<Realm>
     invitePlayer(realmId: string, uuid: string): Promise<Realm>
-    changeRealmState(realmId: string, state: 'open' | 'close'): Pomise<void>
+    changeRealmState(realmId: string, state: 'open' | 'close'): Promise<void>
+    getRealmInvite(realmId: string): Promise<RealmInvite>
+    refreshRealmInvite(realmId: string): Promise<RealmInvite>
+    getPendingInviteCount(): Promise<number>
+    getPendingInvites(): Promise<RealmPlayerInvite[]>
+    acceptRealmInvitation(invitationId: string): Promise<void>
+    rejectRealmInvitation(invitationId: string): Promise<void>
+    acceptRealmInviteFromCode(realmInviteCode: string): Promise<void>
   }
 
   export class JavaRealmAPI extends RealmAPI {
     getRealmAddress(realmId: string): Promise<Address>
     invitePlayer(realmId: string, uuid: string, name: string): Promise<Realm>
-    changeRealmState(realmId: string, state: 'open' | 'close'): Pomise<void>
+    changeRealmState(realmId: string, state: 'open' | 'close'): Promise<void>
   }
 
   export interface Realm {
@@ -57,6 +64,24 @@ declare module 'prismarine-realms' {
     member: boolean
     clubId: number
     subscriptionRefreshStatus: null
+  }
+
+  export interface RealmPlayerInvite {
+    invitationId: string
+    worldName: string
+    worldDescription: string
+    worldOwnerName: string
+    worldOwnerXUID: string
+    createdOn: number
+  }
+
+  export interface RealmInvite {
+    inviteCode: string,
+    ownerXUID: string,
+    type: string,
+    createdOn: number,
+    inviteLink: string,
+    deepLinkUrl: string,
   }
 
   export interface RealmPlayer {
